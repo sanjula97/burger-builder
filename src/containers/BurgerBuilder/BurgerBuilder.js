@@ -13,19 +13,10 @@ import * as burgerBuilderActions from "../../store/actions/index";
 class BurgerBuilder extends Component {
   state = {
     purchasing: false,
-    loading: false,
-    error: false,
   };
 
   componentDidMount() {
-    // axios
-    //   .get("https://my-burger-3627c.firebaseio.com/ingrediants.json")
-    //   .then((response) => {
-    //     this.setState({ ingrediants: response.data });
-    //   })
-    //   .catch((error) => {
-    //     this.setState({ error: true });
-    //   });
+    this.props.onInitIngrediants();
   }
 
   updateurchaseState(ingrediants) {
@@ -64,7 +55,7 @@ class BurgerBuilder extends Component {
 
     let orderSummary = null;
 
-    let burger = this.state.error ? (
+    let burger = this.props.error ? (
       <p>Ingrediants cant be loaded!</p>
     ) : (
       <Spinner />
@@ -95,10 +86,6 @@ class BurgerBuilder extends Component {
       );
     }
 
-    if (this.state.loading) {
-      orderSummary = <Spinner />;
-    }
-
     return (
       <Aux>
         <Modal
@@ -117,6 +104,7 @@ const mapStateToProps = (state) => {
   return {
     ings: state.ingrediants,
     price: state.totalPrice,
+    error: state.error,
   };
 };
 
@@ -126,6 +114,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(burgerBuilderActions.addIngrediant(ingName)),
     onIngrediantRemoved: (ingName) =>
       dispatch(burgerBuilderActions.removeIngrediant(ingName)),
+    onInitIngrediants: () => dispatch(burgerBuilderActions.initIngrediants()),
   };
 };
 
