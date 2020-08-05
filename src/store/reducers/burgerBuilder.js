@@ -1,4 +1,5 @@
 import * as actionTypes from "../actions/actionTypes";
+import { updateObject } from "../utility";
 
 const initialState = {
   ingrediants: null,
@@ -16,14 +17,18 @@ const INGREDIANT_PRICES = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.ADD_INGREDIANT:
-      return {
-        ...state,
-        ingrediants: {
-          ...state.ingrediants,
-          [action.ingrientName]: state.ingrediants[action.ingrientName] + 1,
-        },
+      const updatedIngrediant = {
+        [action.ingrientName]: state.ingrediants[action.ingrientName] + 1,
+      };
+      const updatedIngrediants = updateObject(
+        state.ingrediants,
+        updatedIngrediant
+      );
+      const updatedState = {
+        ingrediants: updatedIngrediants,
         totalPrice: state.totalPrice + INGREDIANT_PRICES[action.ingrientName],
       };
+      return updateObject(state, updatedState);
     case actionTypes.REMOVE_INGREDIANT:
       return {
         ...state,
@@ -34,8 +39,7 @@ const reducer = (state = initialState, action) => {
         totalPrice: state.totalPrice - INGREDIANT_PRICES[action.ingrientName],
       };
     case actionTypes.SET_INGREDIANTS:
-      return {
-        ...state,
+      return updateObject(state, {
         ingrediants: {
           salad: action.ingrediants.salad,
           bacon: action.ingrediants.bacon,
@@ -44,12 +48,9 @@ const reducer = (state = initialState, action) => {
         },
         totalPrice: 4,
         error: false,
-      };
+      });
     case actionTypes.FETCH_INGREDIANTS_FAILED:
-      return {
-        ...state,
-        error: true,
-      };
+      return updateObject(state, { error: true });
     default:
       return state;
   }
