@@ -71,7 +71,7 @@ class ContactData extends Component {
           type: "email",
           placeholder: "Your Email",
         },
-        value: "",
+        value: "fastest",
         validation: {
           required: true,
         },
@@ -190,9 +190,9 @@ class ContactData extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    ings: state.ingrediants,
-    price: state.totalPrice,
-    loading: state.loading,
+    ings: state.burgerBuilder.ingrediants,
+    price: state.burgerBuilder.totalPrice,
+    loading: state.order.loading,
   };
 };
 
